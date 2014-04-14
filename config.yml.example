@@ -1,0 +1,19 @@
+ip_restrictions:
+  - 127.0.0.1
+  - 207.223.240.187
+  - 207.223.240.188
+
+watch:
+  web-service-v3:
+    type: bitbucket
+    slug: club-hub-web-service
+    path: /var/www/web-service-v3
+    branch: v3
+
+  blabla:
+    type: bitbucket
+    path: /var/www/web-service-v3
+    branch: master
+
+
+
