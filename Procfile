@@ -1,1 +1,1 @@
-githooks: subcontract --rvm . thin start -p 9999
+githooks: subcontract --rvm . -- thin start -p 9999
