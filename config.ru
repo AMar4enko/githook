@@ -36,6 +36,7 @@ end
 router.add('/:app_name') do |env|
   logger.info "Request from #{env['REMOTE_ADDR']}"
   next [401,{},[]] unless ip_address_valid?(env['REMOTE_ADDR'])
+  request = Rack::Request.new(env)
   params = env['router.params']
 
   next [404,{},[]] unless @app = config.watch[params[:app_name]]
@@ -46,9 +47,9 @@ router.add('/:app_name') do |env|
 
   type = @app[:type]
 
-  logger.info env['rack.input'].read
+  logger.info request.params['payload']
 
-  request = send("parse_#{type}_request", env['rack.input'].read)
+  request = send("parse_#{type}_request", request.params['payload'])
 
   if request[:branches].include?(@app.branch)
     logger.info "Fetching #{@app.branch} branch"
