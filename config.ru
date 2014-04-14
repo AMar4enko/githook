@@ -55,7 +55,7 @@ router.add('/:app_name') do |env|
     logger.info "Fetching #{@app.branch} branch"
     output = []
     EventMachine::Synchrony.defer do
-      output = `cd #{@app.path}`.split("\n") + `git pull`.split("\n")
+      output = `git --work-tree="#{@app.path}" pull`.split("\n")
     end
     output.each { |line| logger.info(line) }
   end
