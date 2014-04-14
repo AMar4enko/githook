@@ -46,6 +46,8 @@ router.add('/:app_name') do |env|
 
   type = @app[:type]
 
+  logger.info env['rack.input'].read
+
   request = send("parse_#{type}_request", env['rack.input'].read)
 
   if request[:branches].include?(@app.branch)
