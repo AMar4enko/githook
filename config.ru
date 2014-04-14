@@ -34,6 +34,7 @@ def parse_github_request(body)
 end
 
 router.add('/:app_name') do |env|
+  logger.info "Request from #{env['REMOTE_ADDR']}"
   next [401,{},[]] unless ip_address_valid?(env['REMOTE_ADDR'])
   params = env['router.params']
 
