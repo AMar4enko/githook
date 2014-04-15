@@ -43,8 +43,6 @@ router.add('/:app_name') do |env|
 
   logger.info "Requesting #{params[:app_name]}"
 
-  @app
-
   type = @app[:type]
 
   logger.info request.params['payload']
@@ -54,11 +52,14 @@ router.add('/:app_name') do |env|
   if request[:branches].include?(@app.branch)
     logger.info "Fetching #{@app.branch} branch"
     output = []
+
+    cmd_prefix = "git --git-dir=\"#{@app.path}/.git\" --work-tree=\"#{@app.path}\""
+
     EventMachine::Synchrony.defer do
-      logger.info "git --work-tree=\"#{@app.path}\" fetch #{@app.remote}"
-      `git --work-tree="#{@app.path}" fetch #{@app.remote} `
-      logger.info "git --work-tree=\"#{@app.path}\" pull #{@app.remote} #{@app.branch}"
-      output = `git --work-tree="#{@app.path}" pull #{@app.remote} #{@app.branch}`.split("\n")
+      logger.info "#{cmd_prefix} fetch #{@app.remote}"
+      `#{cmd_prefix} fetch #{@app.remote}`
+      logger.info "#{cmd_prefix} pull #{@app.remote} #{@app.branch}"
+      output = `#{cmd_prefix} pull #{@app.remote} #{@app.branch}`.split("\n")
     end
     output.each { |line| logger.info(line) }
   end
